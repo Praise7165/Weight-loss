@@ -20,26 +20,69 @@
 
                         <form action="" class="imperial">
 
+
+                            <div></div>
+
                         
+                            
+                            <div >
+                                <div class="label"><label for="p-loss">What percentage do you want to reduce by?</label></div>
+                                <input type="number" id="p-loss" name="p-loss" placeholder="Percentage loss" class="full-input">
+                            </div>
                             
                             <div>
                                 <div class="label"><label for="height">What is your height?</label></div>
-                                <input type="number" id="feet" name="height" class="imperial" placeholder="feet">
-                                <input type="number" id="inches" name="height" class="imperial" placeholder="inches">
+
+                                <div class="flex-input">
+                                    <input type="number" id="feet" name="height" placeholder="feet" min="0">
+                                    <input type="number" id="inches" name="height"  placeholder="inches" min="0" max="11">
+                                </div>
+
                             </div>
 
 
                             
                             <div>
                                 <div class="label"><label for="weight">What is your weight?</label></div>
-                                <input type="number" id="stone" name="weight" placeholder="stone">
-                                <input type="number" id="pounds" name="weight" placeholder="pounds">
+
+                                <div class="flex-input">
+                                    <input type="number" id="stone" name="weight" placeholder="stone" min="0">
+                                    <input type="number" id="pounds" name="weight" placeholder="pounds" min="0" max="13">
+                                </div>
+
                             </div>
 
-                            <button>Calculate weight loss</button>
+                            <button type="button">Calculate weight loss</button>
+
+
+                            
                             
                         </form>
                         
+                    </div>
+
+                    <div class="result hidden">
+                        <div class="arrow">&leftarrow;</div>
+                        <div class="indicators">
+                            <div id="weight-loss">
+                                <p>You could lose</p>
+                                <h3>32</h3>
+                            </div>
+
+                            <div id="weight-percent">
+                                <p>Weight Change</p>
+                                <h3>32</h3>
+                            </div>
+
+                            <div id="BMI">
+                                <p>BMI <span class="health">(Healthy)</span></p>
+                                <h3>32</h3>
+                            </div>
+
+                        </div>
+
+
+                        <div class="graph"></div>
                     </div>
                     
                 </div>
