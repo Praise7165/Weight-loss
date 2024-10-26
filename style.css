@@ -134,7 +134,10 @@ form > div {
     margin-top: .8rem;
 }
 
-#weight-loss h3
+#weight-loss h3, #weight-percent h3 {
+    color:rgb(47, 56, 54);
+}
+
 #weight-loss {
     background-color: rgb(247, 245, 237);
     color: rgb(214, 190, 93);
