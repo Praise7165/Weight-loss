@@ -66,13 +66,35 @@ button {
     margin-bottom: 1rem;
 }
 
-input {
+
+
+.input {
     height: 40px;
     border: 1px solid rgb(231, 228, 228);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     border-radius: .5rem;
     background-color: transparent;
+    width: 50%;
     padding: 0 .8rem;
+    color:rgb(153, 148, 148);
+
+}
+
+#percent-input {
     width: 100%;
+}
+
+input {
+    height: 100%;
+    width: 50%;
+    border: none;
+}
+
+input:focus, input:active{
+    user-select: none;
+    outline: none;
 }
 
 
@@ -122,10 +144,6 @@ form > div {
     background-color: rgb(239, 247, 245);
 }
 
-#BMI {
-    background-color: rgb(239, 248, 247);
-}
-
 
 .graph {
     height: 320px;
@@ -135,6 +153,12 @@ form > div {
     font-size: 24px;
     cursor: pointer;
 }
+
+
+.healthy { background-color: #dff0d8; color: #3c763d; }
+.overweight { background-color: #fcf8e3; color: #8a6d3b; }
+.underweight { background-color: #f2dede; color: #a94442; }
+.obese { background-color: #f2dede; color: #a94442; }
 
 
 

@@ -19,23 +19,18 @@
                         <p>Based on the results of a peer-reviewed clinical study of 806 participants.</p>
 
                         <form action="" class="imperial">
-
-
-                            <div></div>
-
-                        
-                            
+              
                             <div >
                                 <div class="label"><label for="p-loss">What percentage do you want to reduce by?</label></div>
-                                <input type="number" id="p-loss" name="p-loss" placeholder="Percentage loss" class="full-input">
+                                <div class="input" id="percent-input"><input type="number" id="p-loss" name="p-loss" class="full-input" value="26"><span>percent</span></div>
                             </div>
                             
                             <div>
                                 <div class="label"><label for="height">What is your height?</label></div>
 
                                 <div class="flex-input">
-                                    <input type="number" id="feet" name="height" placeholder="feet" min="0">
-                                    <input type="number" id="inches" name="height"  placeholder="inches" min="0" max="11">
+                                    <div class="input"><input type="number" id="feet" name="height" min="0" value="5"> <span>feet</span></div>
+                                    <div class="input"><input type="number" id="inches" name="height"  min="0" max="11" value="8"> <span>inches</span></div>
                                 </div>
 
                             </div>
@@ -46,8 +41,8 @@
                                 <div class="label"><label for="weight">What is your weight?</label></div>
 
                                 <div class="flex-input">
-                                    <input type="number" id="stone" name="weight" placeholder="stone" min="0">
-                                    <input type="number" id="pounds" name="weight" placeholder="pounds" min="0" max="13">
+                                    <div class="input"><input type="number" id="stone" name="weight" placeholder="stone" min="0" value="15"><span>stone</span></div>
+                                    <div class="input"><input type="number" id="pounds" name="weight" placeholder="pounds" min="0" max="13" value="9"><span>pounds</span></div>
                                 </div>
 
                             </div>
@@ -75,7 +70,7 @@
                             </div>
 
                             <div id="BMI">
-                                <p>BMI <span class="health">(Healthy)</span></p>
+                                <p>BMI <span class="health">(Status)</span></p>
                                 <h3>32</h3>
                             </div>
 
