@@ -149,10 +149,14 @@ form > div {
 }
 
 
-
-.graph {
-    height: 320px;
+.result {
+    max-width: 640px;
 }
+
+#graph {
+    transition: fill .5s linear;
+}
+
 
 .arrow {
     font-size: 24px;
