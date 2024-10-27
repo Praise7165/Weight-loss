@@ -21,12 +21,7 @@ const arrow = document.querySelector('.arrow');
 let weightChart = null;
 
 
-
-
-
 button.addEventListener('click', calcWeigthLoss);
-
-
 
 
 function calcWeigthLoss() {
@@ -128,6 +123,7 @@ function calcWeigthLoss() {
 
 
 
+
     function createWeightChart(months, projectedWeights) {
 
         // Destroy existing chart if it exists
@@ -137,85 +133,79 @@ function calcWeigthLoss() {
 
         const ctx = document.getElementById('graph').getContext('2d');
 
+        
+
         weightChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: months,
                 datasets: [{
                     data: projectedWeights,
-                    borderColor: '#4CAF50',
-                    borderJoinStyle: 'round',
-                    cubicInterpolationMode: 'monotone',
+                    borderColor: 'green',
                     pointBackgroundColor: 'transparent',
                     pointBorderColor: 'transparent',
-                    spanGaps: true
+                    borderWidth: 2,
+                    fill: true,
+                    color: 'linear-gradient(225deg, rgb(236,245,237) 0%, rgb(217,246,220) 100%)',
                 }]
             },
             options: {
                 legend: {
                     display: false
-                },
+                }, 
 
-                animation: {
-    
-                    // Animation duration in milliseconds
-                    duration: 10000, 
-                    
-                    onProgress: function(animation) {
-                        // You can add custom animation logic here
+                hover: {
+                    mode: 'nearest',
+                    intersect: 'true',
+                    interaction: {
+                        mode: 'index'
                     },
+                    onHover: (e, elements) => {
+                        if (elements && elements.length) {
 
-                    onComplete: function() {
-                        console.log('Animation completed');
+                            
+                            let index = Number(elements[0]._index);
+
+
+                            const dataPoint = elements[0];
+                            const dataset = weightChart.config.data.datasets[0];
+                            
+                            // Get all relevant information
+                            const value = dataset.data[index];
+                            const label = weightChart.config.data.labels[index];
+
+
+                            console.log({label, value});
+
+
+                            
+                        }
                     }
-                      
-                },
-
-                
+                }
             }
         });
 
+        console.log(weightChart);
 
-        weightChart.options.animation = {
-            x: {
-              type: 'number',
-              easing: 'linear',
-              duration: 10000,
-              from: NaN, // the point is initially skipped
-              delay(ctx) {
-                if (ctx.type !== 'data' || ctx.xStarted) {
-                  return 0;
-                }
-                ctx.xStarted = true;
-                return ctx.index * 100;
-              }
-            }
-        };
     }
 
 
 
 
 
-
-
-
-    form.classList.toggle('hidden');
-    result.classList.toggle('hidden');
+    //form.classList.toggle('hidden');
+    //result.classList.toggle('hidden');
 
 
 }
 
 
-
-
-
+/*
 arrow.addEventListener('click', () => {
     form.classList.toggle('hidden');
     result.classList.toggle('hidden');
-})
-
-
+});
+*/
 
 
 
