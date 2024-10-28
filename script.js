@@ -23,7 +23,6 @@ const arrow = document.querySelector('.arrow');
 
 let weightChart = null;
 
-
 button.addEventListener('click', calcWeigthLoss);
 
 
@@ -104,8 +103,7 @@ function calcWeigthLoss() {
         }
 
         const ctx = document.getElementById('graph').getContext('2d');
-
-        
+    
 
         weightChart = new Chart(ctx, {
             type: 'line',
@@ -121,83 +119,118 @@ function calcWeigthLoss() {
                     color: 'linear-gradient(225deg, rgb(236,245,237) 0%, rgb(217,246,220) 100%)',
                 }]
             },
+
+
+
+
+
             options: {
+
+                tooltips: { enabled: false },
+
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+
                 legend: {
                     display: false
-                }, 
+                },
+
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                },
 
                 hover: {
                     mode: 'nearest',
-                    intersect: 'true',
-                    interaction: {
-                        mode: 'index'
-                    },
-                    onHover: (e, elements) => {
-                        const hoverDisplay = document.getElementById('hover-value');
+                    intersect: true,
+                },
 
-                        if (elements && elements.length) { 
-                            let index = Number(elements[0]._index);
+                onHover: (e, elements) => {
+                    const hoverDisplay = document.getElementById('hover-value');
 
+                    // reset cursor if no elements
+                    if (!elements || !elements.length) {
+                        e.target.style.cursor = 'default';
+                        hoverDisplay.style.display = 'none';
 
-                            // const dataPoint = elements[0];
-                            const dataset = weightChart.config.data.datasets[0];
-                            
-                            // Get all relevant information
-                            const value = dataset.data[index];
-                            const label = weightChart.config.data.labels[index];
-
-
-                            // Update display element
-                            hoverDisplay.textContent = `${label}: ${value}`;
-                            hoverDisplay.style.display = 'block';
-                    
-                            // Position the display near the cursor
-                            hoverDisplay.style.left = `${e.clientX + 10}px`;
-                            hoverDisplay.style.top = `${e.clientY + 10}px`;
-                    
-                            // Optional: Change cursor
-                            e.target.style.cursor = 'pointer';
-
-                            weightLoss = Math.round(monthlyChange * index * 10) / 10;
-                        
-                        
-                            // to convert the height and weight to metric value(m & kg)
-                            userWeight = value * 6.35;
-                        
-                            BMI = Math.round(userWeight / userHeight ** 2);
-                
-                        
-                            checkBMI(BMI);
-
-
-                            // split weight loss whereever there is point.
-                            weightLossImperial = String(weightLoss).split('.');
-                        
-                
-                            let weightLossp = Math.round(weightChange * (index / monthsToTarget)); 
-
-                            // set the text content of the element.
-                            wLoss.textContent = `${weightLossImperial[0]}st ${weightLossImperial[1] || 0}lb`;
-                            wLossPercent.textContent = weightLossp + '%';
-                            BMIel.textContent = BMI;
-
-
-
-                            wUpdate.textContent = `${weightLossImperial[0]}st ${weightLossImperial[1] || 0}lb`;
-                            mUpdate.textContent = label;
-
-  
-                        }
+                        return;
                     }
-                }
+
+                    // Get data for the hovered point
+                    const index = elements[0]._index;  // Update from _index which is deprecated
+                    const dataset = weightChart.data.datasets[0];
+                    const value = dataset.data[index];
+                    const label = weightChart.data.labels[index];
+
+
+                    // Update hover display
+                    hoverDisplay.textContent = `${label}: ${value}`;
+                    hoverDisplay.style.display = 'block';
+
+                    // Position the display near cursor with overflow protection
+                    const rect = e.target.getBoundingClientRect();
+                    const displayRect = hoverDisplay.getBoundingClientRect();
+        
+                    let left = e.clientX + 10;
+                    let top = e.clientY + 10;
+
+
+                    // Prevent tooltip from going off-screen
+                    if (left + displayRect.width > window.innerWidth) {
+                        left = e.clientX - displayRect.width - 10;
+                    }
+                    if (top + displayRect.height > window.innerHeight) {
+                        top = e.clientY - displayRect.height - 10;
+                    }
+        
+                    hoverDisplay.style.left = `${left}px`;
+                    hoverDisplay.style.top = `${top}px`;
+
+
+                    // Update cursor
+                    e.target.style.cursor = 'pointer';
+
+
+                    // Calculate weight loss and BMI
+                    // const monthlyChange = calculateMonthlyChange(); 
+                    const weightLoss = Math.round(monthlyChange * index * 10) / 10;
+                    const userWeight = value * 6.35; // Convert to kg
+                    const BMI = Math.round(userWeight / (userHeight ** 2));
+
+
+                    // Update BMI status
+                    checkBMI(BMI);
+
+
+                    // Format weight loss display
+                    const weightLossImperial = String(weightLoss).split('.');
+                    const weightLossp = Math.round(weightChange * (index / monthsToTarget));
+
+
+                    // Update DOM elements
+                    const updateText = function () {
+                        wLoss.textContent = `${weightLossImperial[0]}st ${weightLossImperial[1] || 0}lb`;
+                        wLossPercent.textContent = `${weightLossp}%`;
+                        BMIel.textContent = BMI;
+                        wUpdate.textContent = `${weightLossImperial[0]}st ${weightLossImperial[1] || 0}lb`;
+                        mUpdate.textContent = label;
+                    };
+
+                    updateText();
+
+                },
+
+
             }
         });
 
     }
-
-
-
-
 
     form.classList.toggle('hidden');
     result.classList.toggle('hidden');
@@ -211,8 +244,6 @@ arrow.addEventListener('click', () => {
     form.classList.toggle('hidden');
     result.classList.toggle('hidden');
 });
-
-
 
 
 // function to get the next 6 months.
