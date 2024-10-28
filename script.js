@@ -11,6 +11,9 @@ const wLoss = document.querySelector('#weight-loss > h3');
 const wLossPercent = document.querySelector('#weight-percent > h3');
 const BMIel = document.querySelector('#BMI > h3');
 const bmiEl = document.querySelector('#BMI');
+const hUpdate = document.querySelector('.h-update');
+const wUpdate = document.querySelector('.weight');
+const mUpdate = document.querySelector('.month');
 
 const form = document.querySelector('.form');
 const result = document.querySelector('.result');
@@ -31,76 +34,46 @@ function calcWeigthLoss() {
     const poundsValue = Number(pounds.value) || 0;
     const feetValue = Number(feet.value) || 0;
     const inchesValue = Number(inches.value) || 0;
-    const weightChange = Number(pLoss.value) || 0;
+    let weightChange = Number(pLoss.value) || 0;
     
-
-
     // to calculate the total pounds(weight) and inches(height) value
     const totalWeight = stoneValue + (poundsValue / 14);
     const totalHeight = feetValue + (inchesValue / 12);
 
 
     // to convert the height and weight to metric value(m & kg)
-    const userWeight = totalWeight * 6.35;
+    let userWeight = totalWeight * 6.35;
     const userHeight = totalHeight / 3.281;
-
-
-
-
 
     let weightLoss = Math.round(10 * (weightChange / 100)  * totalWeight) / 10;
 
     
-
     // converted to kg
-    const idealWeight = userWeight - (weightLoss * 6.35);
+    let idealWeight = userWeight - (weightLoss * 6.35);
 
-    const BMI = Math.round(idealWeight / userHeight ** 2);
+    let BMI = Math.round(idealWeight / userHeight ** 2);
 
-
-
+    checkBMI(BMI);
 
     // split weight loss whereever there is point.
-    const weightLossImperial = String(weightLoss).split('.');
+    let weightLossImperial = String(weightLoss).split('.');
 
 
     // set the text content of the element.
-    wLoss.textContent = `${weightLossImperial[0]}s ${weightLossImperial[1] || 0}lb`;
+    wLoss.textContent = `${weightLossImperial[0]}st ${weightLossImperial[1] || 0}lb`;
     wLossPercent.textContent = weightChange + '%';
     BMIel.textContent = BMI;
 
 
-    // Determine BMI category
-    let healthStatus, styleClass; 
 
-    if (BMI <= 18.5) {
-        healthStatus = "(Underweight)";
-        styleClass = "underweight";
-    } else if (BMI <= 25) {
-        healthStatus = "(Healthy)";
-        styleClass = "healthy";
-    } else if (BMI <= 30) {
-        healthStatus = "(Overweight)";
-        styleClass = "overweight";
-    } else {
-        healthStatus = "(Obese)";
-        styleClass = "obese";
-    }
-
-
-    // assign health status
-    health.textContent = healthStatus;
-    bmiEl.className = styleClass;
     
-
-
-
+    
     // calculate weight loss trajectory
     const monthsToTarget = 11;
-    let targetWeight = totalWeight - weightLoss;
     let monthlyChange = weightLoss / monthsToTarget;
-
     let lossProgression = [];
+
+
 
     for (let i = 0; i <= monthsToTarget; i++) {
 
@@ -108,14 +81,13 @@ function calcWeigthLoss() {
         lossProgression.push(monthlyweight);
     };
 
-    console.log(totalWeight);
-    console.log(targetWeight);
-    console.log(lossProgression);
-
 
     // get an array of the next 6 months.
 
     let nextMonths = getNextMonths(monthsToTarget);
+
+    wUpdate.textContent = `${weightLossImperial[0]}st ${weightLossImperial[1] || 0}lb`;
+    mUpdate.textContent = nextMonths[nextMonths.length - 1];
 
 
     // Update or create chart
@@ -161,13 +133,13 @@ function calcWeigthLoss() {
                         mode: 'index'
                     },
                     onHover: (e, elements) => {
-                        if (elements && elements.length) {
+                        const hoverDisplay = document.getElementById('hover-value');
 
-                            
+                        if (elements && elements.length) { 
                             let index = Number(elements[0]._index);
 
 
-                            const dataPoint = elements[0];
+                            // const dataPoint = elements[0];
                             const dataset = weightChart.config.data.datasets[0];
                             
                             // Get all relevant information
@@ -175,17 +147,51 @@ function calcWeigthLoss() {
                             const label = weightChart.config.data.labels[index];
 
 
-                            console.log({label, value});
+                            // Update display element
+                            hoverDisplay.textContent = `${label}: ${value}`;
+                            hoverDisplay.style.display = 'block';
+                    
+                            // Position the display near the cursor
+                            hoverDisplay.style.left = `${e.clientX + 10}px`;
+                            hoverDisplay.style.top = `${e.clientY + 10}px`;
+                    
+                            // Optional: Change cursor
+                            e.target.style.cursor = 'pointer';
+
+                            weightLoss = Math.round(monthlyChange * index * 10) / 10;
+                        
+                        
+                            // to convert the height and weight to metric value(m & kg)
+                            userWeight = value * 6.35;
+                        
+                            BMI = Math.round(userWeight / userHeight ** 2);
+                
+                        
+                            checkBMI(BMI);
 
 
-                            
+                            // split weight loss whereever there is point.
+                            weightLossImperial = String(weightLoss).split('.');
+                        
+                
+                            let weightLossp = Math.round(weightChange * (index / monthsToTarget)); 
+
+                            // set the text content of the element.
+                            wLoss.textContent = `${weightLossImperial[0]}st ${weightLossImperial[1] || 0}lb`;
+                            wLossPercent.textContent = weightLossp + '%';
+                            BMIel.textContent = BMI;
+
+
+
+                            wUpdate.textContent = `${weightLossImperial[0]}st ${weightLossImperial[1] || 0}lb`;
+                            mUpdate.textContent = label;
+
+  
                         }
                     }
                 }
             }
         });
-
-        console.log(weightChart);
 
     }
 
@@ -193,19 +199,19 @@ function calcWeigthLoss() {
 
 
 
-    //form.classList.toggle('hidden');
-    //result.classList.toggle('hidden');
+    form.classList.toggle('hidden');
+    result.classList.toggle('hidden');
 
 
 }
 
 
-/*
+
 arrow.addEventListener('click', () => {
     form.classList.toggle('hidden');
     result.classList.toggle('hidden');
 });
-*/
+
 
 
 
@@ -227,6 +233,31 @@ function getNextMonths(numberOfMonths) {
         months.push(monthName);
     }
     return months;
+}
+
+
+function checkBMI(bmi) {
+
+        // Determine BMI category
+        let hStatus, style;
+
+        if (bmi <= 18.5) {
+            hStatus = "(Underweight)";
+            style = "underweight";
+        } else if (bmi <= 25) {
+            hStatus = "(Healthy)";
+            style = "healthy";
+        } else if (bmi <= 30) {
+            hStatus = "(Overweight)";
+            style = "overweight";
+        } else {
+            hStatus = "(Obese)";
+            style = "obese";
+        }
+
+        // assign health status
+        health.textContent = hStatus;
+        bmiEl.className = style;
 }
 
 
